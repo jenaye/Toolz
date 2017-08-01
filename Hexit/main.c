@@ -185,10 +185,12 @@ int main(int argc, char *argv[]) {
 }
 
 
-/*
- -h = l'aide
- -l = little endian
- -f = on passe un fichier a lire
- -i = input form
- -o = output form
-*/
+/* TODO :*/
+/* 0: Fix showDefaultOutput */
+/* 1: Modulariser le code */
+/* 2: Input en mode \x\x / base64 / base32 */
+/* 3: Output en mode \x\x / base64 / base32 */
+/* 4: Crypto de base ? (cesar/xor/vigenere) */
+/* 5: MiddleEndian */
+/* 6: Selecteur de ligne/colonne */
+
