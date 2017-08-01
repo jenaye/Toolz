@@ -6,9 +6,47 @@
 
 #define SIZE 128
 
+
+
+/* Prototypes */
 char *readStreamFromStdin();
 char *readStreamFromFile(FILE *fp);
 void showHelp();
+void showDefaultOutput();
+
+/*Fonctions*/
+
+void showDefaultOutput(char *content) {
+    int compteur = 0;
+    for (int i = 0; i < strlen(content) ; i+=16) { //On affiche 16 charactère par ligne
+        printf("%08x:\t", i); //colonne 1
+
+        for (int j = 0; j < 16; j++) { //colonne 2
+            char chr = content[i+j];
+
+
+            if (j%2 == 0) {
+                printf(" ");
+            }
+
+            printf("%02x", content[i+j]);
+        }
+        printf("\t");
+
+        for (int k = 0; k < 16; k++) { //colonne 3
+            char ch = content[i+k];
+
+            if (ch < 0x20 || ch > 0x7E) {
+                printf(".");
+            } else {
+                printf("%c", ch);
+            }
+        }
+        printf("\n");
+    }
+}
+
+
 
 
 
@@ -45,7 +83,7 @@ char *readStreamFromStdin() {
         }
 
         char c = getc(stdin);
-        if (c == EOF || c == '\n') {
+        if (c == EOF) {
             c = '\0';
             break;
         }
@@ -62,19 +100,26 @@ char *readStreamFromFile(FILE *fp) {
     rewind(fp);
     char *content = (char*) malloc(sizeof(char) * size);
     fread(content, 1, size, fp);
+    content[size] = '\0';
     fclose(fp);
     return content;
 }
 
+
+
+/* Main */
 int main(int argc, char *argv[]) {
 
+    /* Declarations*/
     char *content = NULL;
     bool littleEndian = false;
     bool reverse = false;
     bool help = false;
     int file = -1;
-    int mode = -1;
+    int input = -1;
+    int output = -1;
 
+    /* Parsing des arguments */
     for (int index = 1; index < argc && argv[index][0] == '-'; index++) {
         if ((!strcmp(argv[index], "-l")) || (!strcmp(argv[index], "--littleendian"))) {
             littleEndian = true;
@@ -83,28 +128,36 @@ int main(int argc, char *argv[]) {
         } else if ((!strcmp(argv[index], "-r")) || (!strcmp(argv[index], "--reverse"))) {
             reverse = true;
             break;
+
         } else if ((!strcmp(argv[index], "-h")) || (!strcmp(argv[index], "--help"))) {
             help = true;
+
         } else if  ((!strcmp(argv[index], "-f")) || (!strcmp(argv[index], "--file")))  {
             file = index;
             break;
 
-        } else if ((!strcmp(argv[index], "-m")) || (!strcmp(argv[index], "--mode"))) {
-            mode = index;
+        } else if ((!strcmp(argv[index], "-o")) || (!strcmp(argv[index], "--output"))) {
+            output = index;
             break;
+
+        } else if ((!strcmp(argv[index], "-i")) || (!strcmp(argv[index], "--input"))) {
+            input = index;
+            break;
+
         } else {
             printf("Unrecognized option %s.\n", argv[index]);
             exit(1);
         }
     }
 
+    /* Interpretations en fonctions des arguments */
+
     if (help) {
         showHelp();
         exit(0);
     }
 
-
-
+    /* Recuperation du contenu a traité */
     if (file > -1) {
         FILE *fd = fopen(argv[file+1], "r");
         if (fd == NULL) {
@@ -117,7 +170,17 @@ int main(int argc, char *argv[]) {
         content = readStreamFromStdin();
     }
 
-    printf("Content : %s\n", content);
+    /* Traitement du contenu  en fonction de l'input */
+
+    /*Traitement du contenu en fonction des arguments */
+
+    /* Affichage au format d'output  */
+
+    if (output = -1 || argv[output+1] == "default") {
+        showDefaultOutput(content);
+    }
+
+    printf("TheEnd\n");
     free(content);
 }
 
@@ -126,5 +189,6 @@ int main(int argc, char *argv[]) {
  -h = l'aide
  -l = little endian
  -f = on passe un fichier a lire
- -o = fichier d'output
- */
+ -i = input form
+ -o = output form
+*/
