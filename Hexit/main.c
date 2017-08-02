@@ -52,10 +52,12 @@ void showDefaultOutput(unsigned char *content) {
 
 void showHelp() {
     printf("\t<--- Hexit help --->\n"
-        "-h, --help :\t\t Show this help.\n"
-        "-r , --reverse :\t totally reverse the input.\n"
-        "-l, --littleendian :\t Flip input in little endian.\n"
-        "-f, --file :\t\t Specify a file to take input from. Default is from stdin.\n"
+        "-h  : \t\t Show this help.\n"
+        "-r  :\t\t totally reverse the input.\n"
+        "-l  :\t\t Flip input in little endian.\n"
+        "-f [fichier] :\t Specify a file to take input from. Default is from stdin.\n"
+        "-i [input type] : Specify input type.\n\t\tValid input types are :\n\t\t- hexstring (with or  without 0x)\n\t\t- hexcode (hexstring with \\x)\n\t\t- base 64 / 32\n\t\t- default is raw.\n"
+        "-o  [output type]: Specify output type. Possible arguments are the same as input type.\n"
     );
 }
 
