@@ -9,32 +9,32 @@
 
 
 /* Prototypes */
-char *readStreamFromStdin();
-char *readStreamFromFile(FILE *fp);
+unsigned char *readStreamFromStdin();
+unsigned char *readStreamFromFile(FILE *fp);
 void showHelp();
 void showDefaultOutput();
 
 /*Fonctions*/
 
-void showDefaultOutput(char *content) {
+void showDefaultOutput(unsigned char *content) {
     int compteur = 0;
     for (int i = 0; i < strlen(content) ; i+=16) { //On affiche 16 charactère par ligne
         printf("%08x:\t", i); //colonne 1
 
         for (int j = 0; j < 16; j++) { //colonne 2
-            char chr = content[i+j];
+            unsigned char chr = content[i+j];
 
 
             if (j%2 == 0) {
                 printf(" ");
             }
 
-            printf("%02x", content[i+j]);
+            printf("%02x",(unsigned) content[i+j]);
         }
         printf("\t");
 
         for (int k = 0; k < 16; k++) { //colonne 3
-            char ch = content[i+k];
+            unsigned char ch = content[i+k];
 
             if (ch < 0x20 || ch > 0x7E) {
                 printf(".");
@@ -60,8 +60,8 @@ void showHelp() {
 }
 
 
-char *readStreamFromStdin() {
-    char *content = malloc(SIZE);
+unsigned char *readStreamFromStdin() {
+    unsigned char *content = malloc(SIZE);
 
     if (content == NULL) {
         printf("Unable to malloc.\n");
@@ -94,11 +94,11 @@ char *readStreamFromStdin() {
     return content;
 }
 
-char *readStreamFromFile(FILE *fp) {
+unsigned char *readStreamFromFile(FILE *fp) {
     fseek(fp, 0, SEEK_END);
     int size = ftell(fp);
     rewind(fp);
-    char *content = (char*) malloc(sizeof(char) * size);
+    unsigned char *content = (unsigned char*) malloc(sizeof(char) * size);
     fread(content, 1, size, fp);
     content[size] = '\0';
     fclose(fp);
@@ -111,7 +111,7 @@ char *readStreamFromFile(FILE *fp) {
 int main(int argc, char *argv[]) {
 
     /* Declarations*/
-    char *content = NULL;
+    unsigned char *content = NULL;
     bool littleEndian = false;
     bool reverse = false;
     bool help = false;
@@ -193,4 +193,3 @@ int main(int argc, char *argv[]) {
 /* 4: Crypto de base ? (cesar/xor/vigenere) */
 /* 5: MiddleEndian */
 /* 6: Selecteur de ligne/colonne */
-
