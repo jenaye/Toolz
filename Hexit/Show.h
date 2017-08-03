@@ -1,0 +1,2 @@
+void showHelp();
+void showDefaultOutput();
