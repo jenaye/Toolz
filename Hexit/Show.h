@@ -1,2 +1,2 @@
 void showHelp();
-void showDefaultOutput();
+void showDefaultOutput(unsigned char *content);
